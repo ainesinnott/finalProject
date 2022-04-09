@@ -18,19 +18,18 @@ public class stops {
 
 	stops(String filename, int i)
 	{
-		
+
 		try
 		{
 			File file = new File(filename);
 			Scanner scanner = new Scanner(file);
 			int j = 0;
 			String newName = "";
-			while(scanner.hasNextLine()&&j<=i+1)
+			while(scanner.hasNextLine()&&j<i+1)
 			{
 				String line = scanner.nextLine().trim();
 				String[]key = line.split(",");
 				this.stop_id = key[0];
-				// flagstop, wb, nb, sb, eb
 				this.stop_code = key[1];
 				if(key[2].substring(0,9).equals("FLAGSTOP "))
 				{
@@ -67,16 +66,20 @@ public class stops {
 					a = a.substring(3);
 					newName = a+firstPart;
 				}
-					this.stop_name = newName;
+				this.stop_name = newName;
 				this.stop_desc = key[3];
 				this.stop_lat = key[4];
 				this.stop_lon = key[5];
 				this.zone_id = key[6];
 				this.stop_url = key[7];
 				this.location_type = key[8];
-				this.parent_station = key[9];
+				if(key.length==10)
+				{
+					this.parent_station = key[9];
+				}
 				j++;
 			}
+
 		}catch(Exception x)
 		{
 			String [] key = new String[0];
@@ -86,8 +89,35 @@ public class stops {
 
 	public static void main (String[]Args)
 	{
-		stops newStop = new stops("stops.txt",3);
-		System.out.print(newStop.stop_name);
+		TST tree=new TST();
+		ArrayList<stops> allStops = new ArrayList<stops>();
+		for(int i = 0;i<=10000;i++)
+		{
+			stops newStop = new stops("stops.txt",i);
+			allStops.add(newStop);
+		}
+		for(int i = 1;i<=10000;i++)
+		{
+			String currentName;
+			currentName = allStops.get(i).stop_name;
+			
+			String currentValue = ""+i;
+			tree.put(currentName, currentValue);
+		}
+		
+		ArrayList<String>result = new ArrayList<String>();
+		result = tree.checkPrefix("EYREMOUNT");
+		ArrayList<Integer>resultInt = new ArrayList<Integer>();
+
+		for(int i = 0;i<result.size();i++)
+		{
+			resultInt.add(Integer.parseInt(result.get(i)));
+			System.out.println("Stop id: "+allStops.get(resultInt.get(i)).stop_id +", stop code: " +allStops.get(resultInt.get(i)).stop_code+
+					", Stop name: "+allStops.get(resultInt.get(i)).stop_name +", Stop description: "+allStops.get(resultInt.get(i)).stop_desc+
+					", Stop latitude: " + allStops.get(resultInt.get(i)).stop_lat + ", stop longtitude"+allStops.get(resultInt.get(i)).stop_lon + 
+					", Zone ID: "+allStops.get(resultInt.get(i)).zone_id+", Stop URL: "+allStops.get(resultInt.get(i)).stop_url+
+					", Location type: "+allStops.get(resultInt.get(i)).location_type+ ", Parent Station: "+allStops.get(resultInt.get(i)).parent_station);
+		}
 	}
 
 }
