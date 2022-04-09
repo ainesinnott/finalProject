@@ -1,20 +1,24 @@
 package finalProject;
 
+import java.util.ArrayList;
+
 public class TST <Value>{
-	private Node root;
-	
-	private class Node
+	private Node <String>root;
+	private int size;
+
+	private class Node<String>
 	{
-		private Value val;
+		private String val;
 		private char c;
-		private Node left, mid, right;
-		
+		private Node<String> left, mid, right;
+
 	}
-	public void put(String key, Value val)
+	public void put(String key, String val)
 	{
+		size++;
 		root = put(root,key,val,0);
 	}
-	private Node put(Node x, String key, Value val, int d)
+	private Node<String> put(Node<String> x, String key, String val, int d)
 	{
 		char c = key.charAt(d);
 		if(x == null) {
@@ -43,38 +47,83 @@ public class TST <Value>{
 	{
 		return get(key) != null;
 	}
-	public Value get(String key)
+	public String get(String key)
 	{
-		Node x = get(root, key, 0);
+		Node<String> x = get(root, key, 0);
 		if (x==null)
 		{
 			return null;
 		}
 		return x.val;
-		
+
 	}
-	 private Node get(Node x, String key, int d)
-	 {
-		 if(x == null)
-		 {
-			 return null;
-		 }
-		 char c = key.charAt(d);
-		 if(c<x.c)
-		 {
-			 return get(x.left, key, d);
-		 }
-		 else if (c>x.c)
-		 {
-			 return get(x.right, key, d);
-		 }
-		 else if(d<key.length()-1)
-		 {
-			 return get(x.mid, key, d+1);
-		 }
-		 else 
-		 {
-			 return x;
-		 }
-	 }
+	private Node<String> get(Node<String> x, String key, int d)
+	{
+		if(x == null)
+		{
+			return null;
+		}
+		char c = key.charAt(d);
+		if(c<x.c)
+		{
+			return get(x.left, key, d);
+		}
+		else if (c>x.c)
+		{
+			return get(x.right, key, d);
+		}
+		else if(d<key.length()-1)
+		{
+			return get(x.mid, key, d+1);
+		}
+		else 
+		{
+			return x;
+		}
+	}
+	public int size()
+	{
+		return size;
+	}
+	public ArrayList<String> checkPrefix(String prefix)
+	{
+		if(prefix==null)
+		{
+			ArrayList<String> nullEntered = new ArrayList<>();
+			nullEntered.add("The string entered was null");
+			return nullEntered;
+		}
+		ArrayList<String> values = new ArrayList<String>();
+		Node<String> x = get(root, prefix, 0);
+		if (x == null) 
+		{
+			return values;
+		}
+		else if(x.val!=null)
+		{
+			values.add(x.val);
+		}
+		collect(x.mid, new StringBuilder(prefix), values);
+		if (values.get(0) == null) {
+			ArrayList<String> notRecogArrayList = new ArrayList<>();
+			notRecogArrayList.add("The stop address was not recognised");
+			return notRecogArrayList;
+		}
+		return values;
+	}
+	public void collect(Node<String> x, StringBuilder prefix, ArrayList<String>values)
+	{
+		if (x == null)
+			return;
+		collect(x.left,prefix,values);
+		if(x.val!=null)
+		{
+			values.add(x.val);
+
+		}
+		collect(x.mid, prefix.append(x.c), values);
+		prefix.deleteCharAt(prefix.length()-1);
+		collect(x.right, prefix, values);
+
+	}
 }
