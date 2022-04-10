@@ -16,14 +16,17 @@ public class transfers {
 			File file = new File(filename);
 			Scanner scanner = new Scanner(file);
 			int j = 0;
-			while(scanner.hasNextLine()&&j<=i+1)
+			while(scanner.hasNextLine()&&j<i+1)
 			{
 				String line = scanner.nextLine().trim();
 				String[]key = line.split(",");
 				this.from_stop_id = key[0];
 				this.to_stop_id = key[1];
 				this.transfer_type = key[2];
-				this.min_transfer_time = key[3];
+				if(key.length ==4)
+				{
+					this.min_transfer_time = key[3];
+				}
 				j++;
 			}
 

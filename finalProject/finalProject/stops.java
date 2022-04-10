@@ -87,26 +87,28 @@ public class stops {
 		}
 	}
 
-	public static void main (String[]Args)
+	public static void findStop (String input)
 	{
+
+
 		TST tree=new TST();
 		ArrayList<stops> allStops = new ArrayList<stops>();
-		for(int i = 0;i<=10000;i++)
+		for(int i = 0;i<=8759;i++)
 		{
 			stops newStop = new stops("stops.txt",i);
 			allStops.add(newStop);
 		}
-		for(int i = 1;i<=10000;i++)
+		for(int i = 1;i<=8759;i++)
 		{
 			String currentName;
 			currentName = allStops.get(i).stop_name;
-			
+
 			String currentValue = ""+i;
 			tree.put(currentName, currentValue);
 		}
-		
+
 		ArrayList<String>result = new ArrayList<String>();
-		result = tree.checkPrefix("EYREMOUNT");
+		result = tree.checkPrefix(input);
 		ArrayList<Integer>resultInt = new ArrayList<Integer>();
 
 		for(int i = 0;i<result.size();i++)
@@ -118,6 +120,7 @@ public class stops {
 					", Zone ID: "+allStops.get(resultInt.get(i)).zone_id+", Stop URL: "+allStops.get(resultInt.get(i)).stop_url+
 					", Location type: "+allStops.get(resultInt.get(i)).location_type+ ", Parent Station: "+allStops.get(resultInt.get(i)).parent_station);
 		}
+
 	}
 
 }

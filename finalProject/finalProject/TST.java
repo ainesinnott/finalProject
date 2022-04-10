@@ -89,9 +89,9 @@ public class TST <Value>{
 	{
 		if(prefix==null)
 		{
-			ArrayList<String> nullEntered = new ArrayList<>();
-			nullEntered.add("The string entered was null");
-			return nullEntered;
+			ArrayList<String> nullEntry = new ArrayList<>();
+			nullEntry.add("This is an empty string");
+			return nullEntry;
 		}
 		ArrayList<String> values = new ArrayList<String>();
 		Node<String> x = get(root, prefix, 0);
@@ -105,9 +105,9 @@ public class TST <Value>{
 		}
 		collect(x.mid, new StringBuilder(prefix), values);
 		if (values.get(0) == null) {
-			ArrayList<String> notRecogArrayList = new ArrayList<>();
-			notRecogArrayList.add("The stop address was not recognised");
-			return notRecogArrayList;
+			ArrayList<String> notRecognised = new ArrayList<>();
+			notRecognised.add("Sorry, this stop address was not recognised");
+			return notRecognised;
 		}
 		return values;
 	}

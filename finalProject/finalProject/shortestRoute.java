@@ -32,7 +32,7 @@ public class shortestRoute {
 		int currentTrip =0;
 		double cost = 1;
 		ArrayList<stop_times> allStopTimes= new ArrayList<stop_times>();
-		for(int i = 1;i<=2000;i++)
+		for(int i = 1;i<=1700000;i++)
 		{
 			stop_times newStopTime = new stop_times("stop_times.txt",i);
 			allStopTimes.add(newStopTime);
@@ -54,7 +54,7 @@ public class shortestRoute {
 		int minTransferTime;
 
 		ArrayList<transfers> allTransfers= new ArrayList<transfers>();
-		for(int i = 1;i<=2000;i++)
+		for(int i = 1;i<=5085;i++)
 		{
 			transfers newTransfer = new transfers("transfers.txt",i);
 			allTransfers.add(newTransfer);

@@ -5,65 +5,85 @@ import java.util.Scanner;
 
 public class mainInterface {
 
-	public static void main(String[] args) {
-		Scanner input = new Scanner(System.in);
+	public static void main(String[] args) {	
+		boolean exit = false;
 		System.out.println("Welcome to the Vancouver Bus System.");
-		System.out.printf("Would you like to: \n (a) find the... \n (b) find info on a stop \n (c) find info on an arrival time \n (Type'a', 'b' or 'c'): ");
-		String decision = input.next();
-		
-		if(decision.equals("b"))
+		Scanner input = new Scanner(System.in);
+		while(!exit)
 		{
-			System.out.print("Search for a stop by name: ");
-			String name =input.next();
-			TST tree=new TST();
-			ArrayList<stops> allStops = new ArrayList<stops>();
-			for(int i = 0;i<=10000;i++)
-			{
-				stops newStop = new stops("stops.txt",i);
-				allStops.add(newStop);
-			}
-			for(int i = 1;i<=10000;i++)
-			{
-				String currentName;
-				currentName = allStops.get(i).stop_name;
-				
-				String currentValue = ""+i;
-				tree.put(currentName, currentValue);
-			}
-			
-			ArrayList<String>result = new ArrayList<String>();
-		
-			result = tree.checkPrefix(name);
-			ArrayList<Integer>resultInt = new ArrayList<Integer>();
+			System.out.printf("Would you like to: \n (a) find the shortest route between two stops \n (b) find info on a stop based on the name \n (c) find info on a trip based on arrival time \n (Type 'a', 'b', 'c' or 'exit'): ");
+			String decision = input.next();
 
-			for(int i = 0;i<result.size();i++)
+			if (decision.equalsIgnoreCase("a"))
 			{
-				resultInt.add(Integer.parseInt(result.get(i)));
-				System.out.println("Stop id: "+allStops.get(resultInt.get(i)).stop_id +", stop code: " +allStops.get(resultInt.get(i)).stop_code+
-						", Stop name: "+allStops.get(resultInt.get(i)).stop_name +", Stop description: "+allStops.get(resultInt.get(i)).stop_desc+
-						", Stop latitude: " + allStops.get(resultInt.get(i)).stop_lat + ", stop longtitude"+allStops.get(resultInt.get(i)).stop_lon + 
-						", Zone ID: "+allStops.get(resultInt.get(i)).zone_id+", Stop URL: "+allStops.get(resultInt.get(i)).stop_url+
-						", Location type: "+allStops.get(resultInt.get(i)).location_type+ ", Parent Station: "+allStops.get(resultInt.get(i)).parent_station);
-			}
-		}
-		
-		if(decision.equals("c"))
-		{
-			System.out.print("Enter arrival time (hh:mm:ss): ");
-			String arrivalTime = input.next();
-			ArrayList<stop_times> stops= new ArrayList<stop_times>();
-			for(int i = 1;i<=2000;i++)
-			{
-				stop_times newStop = new stop_times("stop_times.txt",i);
-				stops.add(newStop);
+
+				System.out.print("Enter source bus stop: ");
+				int stop1 = input.nextInt();
+
+				System.out.print("Enter destination bus stop: ");
+				int stop2 = input.nextInt();
+				System.out.println("Calculating... ");
+				shortestRoute sr = new shortestRoute();
+				sr.busSystemBuilder();
+
+				System.out.println("Shortest distance from "+stop1+" to "+stop2+" is "+
+						sr.shortestPath(stop1,stop2));
 			}
 
-			ArrayList<String>details = stop_times.findArrivalTime(stops,arrivalTime);
-			for(int i = 0;i<details.size();i++)
+			else if(decision.equalsIgnoreCase("b"))
 			{
-				System.out.println(details.get(i));
+				System.out.print("Search for a stop by name: ");
+				String name =input.next();
+
+				{
+					System.out.println("Calculating... ");
+					stops.findStop(name);
+				}
+			}
+
+			else if(decision.equalsIgnoreCase("c"))
+			{
+				System.out.print("Enter arrival time (hh:mm:ss): ");
+				String arrivalTime = input.next();
+				String[]key = arrivalTime.split(":");
+
+				try {
+					int hours = Integer.parseInt(key[0]);
+					int minutes = Integer.parseInt(key[1]);
+					int seconds = Integer.parseInt(key[2]);
+					if(hours>24||hours<0)
+					{
+						System.out.println("This time is invalid. Please try again. ");
+					}
+					else
+					{
+						System.out.println("Calculating... ");
+						ArrayList<stop_times> stops= new ArrayList<stop_times>();
+						for(int i = 1;i<=10000;i++)
+						{
+							stop_times newStop = new stop_times("stop_times.txt",i);
+							stops.add(newStop);
+						}
+
+						stop_times.findArrivalTime(stops,arrivalTime);
+					}
+
+				}catch(NumberFormatException e)
+				{
+					System.out.println("This is not a valid time");
+				}
+			}
+			else if(decision.equalsIgnoreCase("exit"))
+			{
+				exit = true;
+			}
+			else
+			{
+				System.out.println("Invalid input. Please enter 'a','b','c' or 'exit'.");
 			}
 		}
+
+		System.out.print("Thank you, goodbye! ");
 	}
 
 }

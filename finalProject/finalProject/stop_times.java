@@ -29,9 +29,7 @@ public class stop_times {
 				String line = scanner.nextLine().trim();
 				String[]key = line.split(",");
 				this.trip_id = key[0];
-
 				this.arrival_time = key[1];
-
 				this.departure_time = key[2];
 				this.stop_id = key[3];
 				this.stop_sequence = key[4];
@@ -55,31 +53,31 @@ public class stop_times {
 
 	}
 	static ArrayList<stop_times> insertionSort (ArrayList<stop_times>stops){
-			stop_times temporary;
-			for(int i = 0; i<stops.size(); i++)
+		stop_times temporary;
+		for(int i = 0; i<stops.size(); i++)
+		{
+			for (int j = i; j > 0 ; j--)
 			{
-				for (int j = i; j > 0 ; j--)
+				int number1 =Integer.parseInt(stops.get(j).trip_id);
+				int number2 = Integer.parseInt(stops.get(j-1).trip_id);
+				if(number1<number2)
 				{
-					int number1 =Integer.parseInt(stops.get(j).stop_id);
-					int number2 = Integer.parseInt(stops.get(j-1).stop_id);
-					if(number1>number2)
-					{
-				
-						temporary = stops.get(j);
-						stops.set(j, stops.get(j-1));
-						stops.set(j-1, temporary);
-					}
+
+					temporary = stops.get(j);
+					stops.set(j, stops.get(j-1));
+					stops.set(j-1, temporary);
 				}
 			}
-			return(stops);	
 		}
-	
+		return(stops);	
+	}
+
 	public static void findArrivalTime(ArrayList<stop_times> stops,String arrivalTime)
 	{
 		String str="";
 
 		ArrayList<Integer> values = new ArrayList<Integer>();
-		
+
 		for(int i = 0; i<stops.size();i++)
 		{
 
@@ -94,34 +92,23 @@ public class stop_times {
 			valuesStops.add(stops.get(values.get(i)));
 			insertionSort(valuesStops);
 		}
-		
-		for(int i = 0;i<values.size();i++)
+		if(values.size()==0)
 		{
-
-			System.out.println("trip id: "+valuesStops.get(i).trip_id+", arrival time: "+valuesStops.get(i).arrival_time+
-					", departure time: "+valuesStops.get(i).departure_time +" stop_id: "+valuesStops.get(i).stop_id+
-					", stop_sequence: " +valuesStops.get(i).stop_sequence + ", stop headsign: "+ valuesStops.get(i).stop_headsign+
-					", pickup type: "+valuesStops.get(i).pickup_type+", dropoff type: "+valuesStops.get(i).dropoff_type+
-					", shape distance travelled: "+valuesStops.get(i).shape_dist_traveled);
-
+			System.out.println("Sorry, there are no buses arriving at this time");
 		}
-
-	}
-
-	public static void main (String[]Args)
-	{
-
-		Scanner input = new Scanner(System.in);
-		System.out.print("Enter arrival time (hh:mm:ss): ");
-		String arrivalTime = input.next();
-		ArrayList<stop_times> stops= new ArrayList<stop_times>();
-		for(int i = 1;i<=10000;i++)
+		else
 		{
-			stop_times newStop = new stop_times("stop_times.txt",i);
-			stops.add(newStop);
-		}
+			for(int i = 0;i<values.size();i++)
+			{
 
-		findArrivalTime(stops,arrivalTime);
+				System.out.println("trip id: "+valuesStops.get(i).trip_id+", arrival time: "+valuesStops.get(i).arrival_time+
+						", departure time: "+valuesStops.get(i).departure_time +" stop_id: "+valuesStops.get(i).stop_id+
+						", stop_sequence: " +valuesStops.get(i).stop_sequence + ", stop headsign: "+ valuesStops.get(i).stop_headsign+
+						", pickup type: "+valuesStops.get(i).pickup_type+", dropoff type: "+valuesStops.get(i).dropoff_type+
+						", shape distance travelled: "+valuesStops.get(i).shape_dist_traveled);
+
+			}
+		}
 
 	}
 }
